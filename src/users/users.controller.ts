@@ -2,14 +2,13 @@ import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user-dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from './users.model';
+import { User } from './users.entity';
 import { Param } from '@nestjs/common';
 import { UpdateUserDto } from './dto/create-user-dto';
-@ApiTags('пользователи, но на самом деле  зеки')
+@ApiTags('Пользователи')
 @Controller('users')
 export class UsersController {
     constructor(private UsersService:UsersService){
-
     }
     @ApiOperation({summary:'Это апишка для добавления userov'})
     @ApiResponse({status:200,type:[User]})
@@ -22,19 +21,18 @@ return this.UsersService.createNewUser(userDto)
     @ApiResponse({status:200,type:[User]})
 @Get()
 getAllUsers(){
-    return this.UsersService.getAllPrizoners()
+    return this.UsersService.getAllUsers()
 }
 
-@Delete(':code')
+@Delete(':id')
 //ошибка\
-   deleteUser(@Param('code') code: number):Promise<void | number> {
-    return this.UsersService.deletePrizoner(code);
+   deleteUser(@Param('id') id: number):Promise<void | number> {
+    return this.UsersService.deleteUser(id);
   }
-  @Patch(':code')
-  async updateUser(@Param('code') code:number,
+  @Patch(':id')
+  async updateUser(@Param('id') id:number,
     @Body()   updateUserData:UpdateUserDto ){
-        const updatedUser = await this.UsersService.updateUser(updateUserData,code);
-        console.log(updatedUser,'юсер адатне');
+        const updatedUser = await this.UsersService.updateUser(updateUserData,id);
         return updatedUser;
 }
 }
